@@ -1,13 +1,17 @@
 import { motion } from "framer-motion";
+import type gb from "../langs/gb";
+
+type Language = typeof gb
 
 interface CityCardProps {
   label: string;
   value: string;
   onChange: (v: string) => void;
   pin: string;
+  currentLang: Language;
 }
 
-const CityCard = ({ label, value, onChange, pin }: CityCardProps) => {
+const CityCard = ({ label, value, onChange, pin, currentLang }: CityCardProps) => {
   const CITIES = [
     "Milano",
     "Roma",
@@ -45,7 +49,7 @@ const CityCard = ({ label, value, onChange, pin }: CityCardProps) => {
     >
       <div className="flex items-center justify-between mb-3">
         <span className="font-mono-tag text-[10px] tracking-[0.2em] text-[#c0872f] uppercase">
-          {label}
+          {currentLang.label} {pin}
         </span>
         <span className="font-mono-tag text-[10px] text-[#5b7291]">{pin}</span>
       </div>
@@ -53,7 +57,7 @@ const CityCard = ({ label, value, onChange, pin }: CityCardProps) => {
         list={`cities-${pin}`}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Cerca una città…"
+        placeholder={currentLang.placeholder}
         className="w-full font-display text-xl text-[#1b2e46] placeholder:text-[#1b2e46]/30 placeholder:font-body placeholder:text-base bg-transparent outline-none border-b border-[#1b2e46]/15 focus:border-[#c0872f] pb-2 transition-colors"
       />
       <datalist id={`cities-${pin}`}>
@@ -62,7 +66,7 @@ const CityCard = ({ label, value, onChange, pin }: CityCardProps) => {
         ))}
       </datalist>
       <p className="font-mono-tag text-[10px] text-[#5b7291] mt-3">
-        {value ? "LAT · LON —" : "in attesa di selezione"}
+        {value ? "LAT · LON —" : currentLang.footer}
       </p>
     </motion.div>
   );

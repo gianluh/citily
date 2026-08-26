@@ -1,19 +1,22 @@
 import { useState } from "react";
-import { easeInOut, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import CityCard from "./components/CityCard";
+import "flag-icons/css/flag-icons.min.css";
+import { translations } from "./langs";
+import type gb from "./langs/gb";
+
+type Language = typeof gb;
 
 export default function App() {
   const [cityA, setCityA] = useState("");
   const [cityB, setCityB] = useState("");
+  const [lang, setLang] = useState(localStorage.getItem("lang") || "gb");
+  const languages = ["it", "gb"];
+
   const canCompare = cityA.trim().length > 0 && cityB.trim().length > 0;
 
-  const metrics = [
-    "Sicurezza",
-    "Costo della vita",
-    "Reddito medio",
-    "Qualità della vita",
-    "Istituzione",
-  ];
+  const currentLang: Language =
+    lang === "gb" ? translations.gb : translations.it;
 
   return (
     <div className="relative bg-[#d3e2f2] min-h-dvh w-screen overflow-x-hidden">
@@ -28,48 +31,65 @@ export default function App() {
         }}
       />
 
+      {/* toggle language button */}
+      <div className="absolute flex justify-between w-full gap-2 mt-2 px-2">
+        {languages.map((language) => (
+          <motion.button
+            key={language}
+            onClick={() => {
+              setLang(language);
+              localStorage.setItem("lang", language)
+            }}
+            className="group flex items-center gap-2 rounded-full bg-[#788695]/80 px-4 py-2 text-white shadow-md backdrop-blur-sm hover:bg-[#788695] hover:cursor-pointer"
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+            }}
+            whileFocus={{ scale: 0.95 }}
+            initial={
+              language === "gb" ?
+                { y: -70, x: 70, scale: 0 }
+              : { y: -70, x: -70, scale: 0 }
+            }
+            animate={{ y: 0, x: 0, scale: 1 }}
+            transition={{ type: "spring" }}
+          >
+            <motion.span
+              className={`fi fi-${language} transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110`}
+            />
+
+            <span className="text-sm font-medium">
+              {language.toUpperCase()}
+            </span>
+          </motion.button>
+        ))}
+      </div>
+
       <section className="relative font-body max-w-5xl mx-auto px-6 pt-10 pb-24 flex flex-col items-center text-center">
         <div className="flex items-center gap-2 mb-6">
-          <motion.i
-            className="fa-solid fa-location-dot text-[#c0872f] text-lg"
-            initial={{ x: -350, scale: 4, opacity: 0 }}
-            animate={{ x: 0, scale: 1, opacity: 1 }}
-            transition={{
-              type: "spring",
-              ease: easeInOut,
-              duration: 1,
-              damping: 16,
-            }}
-          />
-          <motion.span
-            className="font-display text-2xl font-semibold tracking-tight text-[#1b2e46]"
-            initial={{ x: 350, scale: 3, opacity: 0 }}
-            animate={{ x: 0, scale: 1, opacity: 1 }}
-            transition={{
-              duration: 1,
-              ease: easeInOut,
-              type: "spring",
-              damping: 16,
-            }}
-          >
+          <motion.i className="fa-solid fa-location-dot text-[#c0872f] text-lg" />
+          <motion.span className="font-display text-2xl font-semibold tracking-tight text-[#1b2e46]">
             Citily
           </motion.span>
         </div>
 
         <h1 className="font-display text-[#1b2e46] text-4xl sm:text-5xl md:text-6xl leading-[1.05] max-w-2xl">
-          Scegli due città.
-          <br /> Scopri dove vivresti meglio.
+          {currentLang.header1}
+          <br /> {currentLang.header2}
         </h1>
 
-        {/* card di confronto */}
+        {/* comparison card */}
         <div className="relative w-full mt-14 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
-          <CityCard label="Città A" value={cityA} onChange={setCityA} pin="A" />
+          <CityCard
+            label="Città A"
+            value={cityA}
+            onChange={setCityA}
+            pin="A"
+            currentLang={currentLang}
+          />
 
           <motion.div
             className="relative flex items-center justify-center md:w-40 h-16 md:h-auto my-2 md:my-0"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", duration: 0.5, damping: 9 }}
           >
             <svg
               className="hidden md:block absolute w-40 h-24 -translate-y-2"
@@ -89,12 +109,18 @@ export default function App() {
             </span>
           </motion.div>
 
-          <CityCard label="Città B" value={cityB} onChange={setCityB} pin="B" />
+          <CityCard
+            label="Città B"
+            value={cityB}
+            onChange={setCityB}
+            pin="B"
+            currentLang={currentLang}
+          />
         </div>
 
-        {/* tag delle metriche */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-10">
-          {metrics.map((m) => (
+        {/* metrics' tag */}
+        <div className="hidden md:flex flex-wrap items-center justify-center gap-2 mt-10 ">
+          {currentLang.metrics.map((m) => (
             <span
               key={m}
               className="font-mono-tag text-[11px] uppercase tracking-wider text-[#1b2e46] bg-white/60 border border-[#1b2e46]/15 rounded-full px-3 py-1.5"
@@ -104,7 +130,7 @@ export default function App() {
           ))}
         </div>
 
-        {/* CTA */}
+        {/* comparison button */}
         <button
           disabled={!canCompare}
           className={`mt-10 font-body font-medium text-sm tracking-wide px-8 py-3.5 rounded-full transition-all duration-200 ${
@@ -113,7 +139,7 @@ export default function App() {
             : "bg-[#1b2e46]/20 text-[#1b2e46]/40 cursor-not-allowed"
           }`}
         >
-          Confronta città →
+          {currentLang.button}
         </button>
       </section>
     </div>
