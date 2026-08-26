@@ -32,7 +32,7 @@ export default function App() {
       />
 
       {/* toggle language button */}
-      <div className="absolute flex justify-between w-full gap-2 mt-2 px-2">
+      <div className="absolute z-10 flex justify-between w-full gap-2 mt-2 px-2">
         {languages.map((language) => (
           <motion.button
             key={language}
