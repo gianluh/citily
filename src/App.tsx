@@ -73,7 +73,7 @@ export default function App() {
           </motion.span>
         </div>
 
-        <h1 className="font-display text-[#1b2e46] text-4xl sm:text-5xl md:text-6xl leading-[1.05] max-w-2xl">
+        <h1 className="font-display text-[#1b2e46] text-3xl sm:text-5xl md:text-6xl leading-[1.05] max-w-2xl">
           {currentLang.header1}
           <br /> {currentLang.header2}
         </h1>

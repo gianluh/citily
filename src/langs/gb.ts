@@ -1,6 +1,6 @@
 const gb = {
-  header1: "Choose two cities.",
-  header2: "Discover where you would live better.",
+  header1: "Compare two cities.",
+  header2: "Find the city that suits you best.",
   label: "City",
   placeholder: "Search for a city...",
   footer: "waiting for selection",
