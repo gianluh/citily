@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { easeIn, easeInOut, easeOut, motion } from "framer-motion";
+import { easeInOut, motion } from "framer-motion";
 import CityCard from "./components/CityCard";
 
 export default function App() {
