@@ -4,14 +4,13 @@ import type gb from "../langs/gb";
 type Language = typeof gb
 
 interface CityCardProps {
-  label: string;
   value: string;
   onChange: (v: string) => void;
   pin: string;
   currentLang: Language;
 }
 
-const CityCard = ({ label, value, onChange, pin, currentLang }: CityCardProps) => {
+const CityCard = ({ value, onChange, pin, currentLang }: CityCardProps) => {
   const CITIES = [
     "Milano",
     "Roma",

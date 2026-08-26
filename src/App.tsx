@@ -81,7 +81,6 @@ export default function App() {
         {/* comparison card */}
         <div className="relative w-full mt-14 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
           <CityCard
-            label="Città A"
             value={cityA}
             onChange={setCityA}
             pin="A"
@@ -110,7 +109,6 @@ export default function App() {
           </motion.div>
 
           <CityCard
-            label="Città B"
             value={cityB}
             onChange={setCityB}
             pin="B"
